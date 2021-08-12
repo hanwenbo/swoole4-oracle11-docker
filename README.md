@@ -24,7 +24,7 @@ docker run -it -p 本地端口:容器端口 -v /你的本地目录:/var/www/proj
 ```
 
 
-FROM php:7.2
+FROM php:7.4
 
 LABEL maintainer="job@fashop.cn"
 
