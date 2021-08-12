@@ -24,6 +24,11 @@ RUN apt-get update \
     libssl-dev \
     libnghttp2-dev \
     libpcre3-dev \
+    libwebp-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    libzip-dev \
     libaio* \
     && apt-get clean \
     && apt-get autoremove
@@ -36,7 +41,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 # imagick gd extension
 RUN pecl install imagick-3.4.3 \
     && docker-php-ext-enable imagick \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-webp=/usr/include/webp --with-jpeg=/usr/include --with-freetype=/usr/include/freetype2/ \
     && docker-php-ext-install -j$(nproc) gd
 
 # PDO extension
