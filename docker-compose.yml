@@ -2,6 +2,8 @@ version: '2'
 services:
   swoole:
     image: ezkuangren/swoole4-oracle11
+    ports:
+      - "xxx:xxx"
     volumes:
       - ./:/var/www/project
     stdin_open: true
