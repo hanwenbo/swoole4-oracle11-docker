@@ -110,8 +110,8 @@ RUN cd / \
     && extension=pdo_oci.so
 
 # install driver sqlsrv
-RUN pecl install sqlsrv
-RUN pecl install pdo_sqlsrv
+# RUN pecl install sqlsrv
+# RUN pecl install pdo_sqlsrv
 
 
 # Install "pdo_odbc" extension.
