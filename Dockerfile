@@ -13,6 +13,8 @@ RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 # Libs
 RUN apt-get update \
     && apt-get install -y \
+    unixodbc \
+    unixodbc-dev \
     libmagickwand-dev \
     libmagickcore-dev \
     curl \
@@ -90,7 +92,7 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
 
 # oracle11
 RUN cd / \
-    && wget https://www.fashop.cn/oracle11.zip -O oracle11.zip \
+    && wget http://hongxingxcx.oss-cn-beijing.aliyuncs.com/oracle11.zip -O oracle11.zip \
     && unzip oracle11.zip \
     && rm oracle11.zip \
     && ( \
@@ -107,6 +109,27 @@ RUN cd / \
     && docker-php-ext-install pdo_oci \
     && extension=pdo_oci.so
 
+# install driver sqlsrv
+RUN pecl install sqlsrv
+RUN pecl install pdo_sqlsrv
+
+
+# Install "pdo_odbc" extension.
+RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
+    && docker-php-ext-install pdo_odbc
+
+RUN set -ex; \
+	docker-php-source extract; \
+	{ \
+		echo '# https://github.com/docker-library/php/issues/103#issuecomment-271413933'; \
+		echo 'AC_DEFUN([PHP_ALWAYS_SHARED],[])dnl'; \
+		echo; \
+		cat /usr/src/php/ext/odbc/config.m4; \
+	} > temp.m4; \
+	mv temp.m4 /usr/src/php/ext/odbc/config.m4; \
+	docker-php-ext-configure odbc --with-unixODBC=shared,/usr; \
+	docker-php-ext-install odbc; \
+	docker-php-source delete
 
 WORKDIR /var/www/project
 
